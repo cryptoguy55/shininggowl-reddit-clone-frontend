@@ -9,11 +9,17 @@ import {
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
-  PROFILE_FAVORITES_PAGE_UNLOADED
+  PROFILE_FAVORITES_PAGE_UNLOADED,
+  SEARCH
 } from '../constants/actionTypes';
 
 export default (state = {}, action) => {
   switch (action.type) {
+    case SEARCH: 
+      return {
+        ...state,
+        articles: state.articles.filter(word => word.title.indexOf(action.payload) != -1)
+      }
     case ARTICLE_FAVORITED:
     case ARTICLE_UNFAVORITED:
       return {

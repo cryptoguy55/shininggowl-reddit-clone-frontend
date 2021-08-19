@@ -82,7 +82,7 @@ class Login extends React.Component {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to="/">
+              <Link to="/input-email">
                 Forgot password?
               </Link>
             </Grid>

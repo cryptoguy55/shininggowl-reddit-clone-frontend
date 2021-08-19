@@ -1,11 +1,11 @@
 import React from 'react';
-import agent from '../agent';
+import agent from '../../agent';
 import { connect } from 'react-redux';
+import { TextField, Button } from '@material-ui/core';
 import {
   SETTINGS_SAVED,
-  SETTINGS_PAGE_UNLOADED,
-  LOGOUT
-} from '../constants/actionTypes';
+  SETTINGS_PAGE_UNLOADED
+} from '../../constants/actionTypes';
 
 class SettingsForm extends React.Component {
   constructor() {
@@ -62,60 +62,49 @@ class SettingsForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitForm}>
-        <fieldset>
 
-          <fieldset className="form-group">
-            <input
+        <fieldset className="form-group  mb-3 flex items-end">
+          <img src={`http://localhost:8080/api/public/${this.state.image}`} alt={this.state.username} className="rounded-full" width="100"/>
+          <input
               className="form-control"
-              type="text"
-              placeholder="URL of profile picture"
-              value={this.state.image}
+              type="file"
               onChange={this.updateState('image')} />
           </fieldset>
+        <fieldset>
 
-          <fieldset className="form-group">
-            <input
-              className="form-control form-control-lg"
-              type="text"
-              placeholder="Username"
-              value={this.state.username}
-              onChange={this.updateState('username')} />
+          <fieldset className="form-group mb-3">
+          <TextField id="outlined-basic" label="Name" variant="outlined" value={this.state.username}
+              onChange={this.updateState('username')} fullWidth/>
+           
+          </fieldset>
+          
+        
+
+          <fieldset className="form-group  mb-3">
+          <TextField id="outlined-basic" label="Bio" variant="outlined"value={this.state.bio}
+              onChange={this.updateState('bio')} multiline fullWidth  rows="4"/>           
           </fieldset>
 
-          <fieldset className="form-group">
-            <textarea
-              className="form-control form-control-lg"
-              rows="8"
-              placeholder="Short bio about you"
-              value={this.state.bio}
-              onChange={this.updateState('bio')}>
-            </textarea>
+          <fieldset className="form-group  mb-3">
+          <TextField id="outlined-basic" label="Email" variant="outlined" value={this.state.email}
+              onChange={this.updateState('email')}   fullWidth  />      
+           
           </fieldset>
 
-          <fieldset className="form-group">
-            <input
-              className="form-control form-control-lg"
-              type="email"
-              placeholder="Email"
-              value={this.state.email}
-              onChange={this.updateState('email')} />
+          <fieldset className="form-group  mb-3">
+          <TextField  type="password" id="outlined-basic" label="New Password" variant="outlined"  value={this.state.password}
+              onChange={this.updateState('password')}   fullWidth  />      
+           
           </fieldset>
-
-          <fieldset className="form-group">
-            <input
-              className="form-control form-control-lg"
-              type="password"
-              placeholder="New Password"
-              value={this.state.password}
-              onChange={this.updateState('password')} />
-          </fieldset>
-
-          <button
-            className="btn btn-lg btn-primary pull-xs-right"
-            type="submit"
-            disabled={this.state.inProgress}>
-            Update Settings
-          </button>
+          <p className="text-right  mb-3">
+          <Button variant="contained"   
+                    type="submit"
+                    disabled={this.state.inProgress}  color="primary"
+                      >
+                    Update Settings
+          </Button>
+          </p>
+         
 
         </fieldset>
       </form>
@@ -129,7 +118,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onClickLogout: () => dispatch({ type: LOGOUT }),
   onSubmitForm: user =>
     dispatch({ type: SETTINGS_SAVED, payload: agent.Auth.save(user) }),
   onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED })
@@ -139,28 +127,16 @@ class Settings extends React.Component {
   render() {
     return (
       <div className="settings-page">
-        <div className="container page">
-          <div className="row">
-            <div className="col-md-6 offset-md-3 col-xs-12">
-
-              <h1 className="text-xs-center">Your Settings</h1>
+        <p className="text-2xl font-bold text text-center mt-4 ">My Profile</p> <br/>     
+         <hr />
+         <br/> 
+              
 
               <SettingsForm
                 currentUser={this.props.currentUser}
                 onSubmitForm={this.props.onSubmitForm} />
-
-              <hr />
-
-              <button
-                className="btn btn-outline-danger"
-                onClick={this.props.onClickLogout}>
-                Or click here to logout.
-              </button>
-
-            </div>
-          </div>
-        </div>
-      </div>
+           </div>
+         
     );
   }
 }

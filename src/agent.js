@@ -31,12 +31,14 @@ const Auth = {
     requests.get('/user'),
   login: (email, password) =>
     requests.post('/users/login', { user: { email, password } }),
-  register: (username, email, password) =>
-    requests.post('/users', { user: { username, email, password } }),
+  register: ( formData) =>
+  superagent.post(`${API_ROOT}/users/`).send(formData).then(responseBody),  
   save: user =>
     requests.put('/user', { user }),
-
-
+  verifyEmail: token => requests.post('/users/verifyEmail', {token: token}),
+  resetPassword: email => requests.post('/users/resetPassword', {email: email}),
+  verifyPassword: (token, password) => requests.post(`/users/verifyPassword?reset_token=${token}`, {password, password}),
+  all: () => requests.get('/user/all'),
 };
 
 const Tags = {
@@ -66,8 +68,9 @@ const Articles = {
     requests.del(`/articles/${slug}/favorite`),
   update: article =>
     requests.put(`/articles/${article.slug}`, { article: omitSlug(article) }),
-  create: article =>
-    requests.post('/articles', { article })
+  create: formData => {
+    return superagent.post(`${API_ROOT}/articles/`).send(formData).use(tokenPlugin).then(responseBody);
+  },  
 };
 
 const Comments = {
@@ -77,6 +80,12 @@ const Comments = {
     requests.del(`/articles/${slug}/comments/${commentId}`),
   forArticle: slug =>
     requests.get(`/articles/${slug}/comments`)
+};
+const Communities = {
+  create: (value) =>
+    requests.post(`/communities/`, { community: value }),
+  all: () =>
+    requests.get(`/communities/`)
 };
 
 const Profile = {
@@ -94,5 +103,6 @@ export default {
   Comments,
   Profile,
   Tags,
+  Communities,
   setToken: _token => { token = _token; }
 };

@@ -47,13 +47,15 @@ const promiseMiddleware = store => next => action => {
 };
 
 const localStorageMiddleware = store => next => action => {
-  if (action.type === REGISTER || action.type === LOGIN) {
+  if ( action.type === LOGIN) {
     if (!action.error) {
       window.localStorage.setItem('jwt', action.payload.user.token);
+      window.localStorage.setItem('refreshjwt', action.payload.user.refreshtoken);
       agent.setToken(action.payload.user.token);
     }
   } else if (action.type === LOGOUT) {
     window.localStorage.setItem('jwt', '');
+    window.localStorage.setItem('refreshjwt', '');
     agent.setToken(null);
   }
 

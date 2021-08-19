@@ -1,14 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import { SET_PAGE } from '../../constants/actionTypes';
-
+import Pagination from '@material-ui/lab/Pagination'
 const mapDispatchToProps = dispatch => ({
   onSetPage: (page, payload) =>
     dispatch({ type: SET_PAGE, page, payload })
 });
 
 const ListPagination = props => {
+  const [page, setPage] = useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
   if (props.articlesCount <= 10) {
     return null;
   }
@@ -18,7 +22,7 @@ const ListPagination = props => {
     range.push(i);
   }
 
-  const setPage = page => {
+  const spage = page => {
     if(props.pager) {
       props.onSetPage(page, props.pager(page));
     }else {
@@ -28,6 +32,8 @@ const ListPagination = props => {
 
   return (
     <nav>
+      <h3>Page: {page}</h3>
+      <Pagination count={10} page={page} onChange={handleChange} />
       <ul className="pagination">
 
         {
@@ -35,7 +41,7 @@ const ListPagination = props => {
             const isCurrent = v === props.currentPage;
             const onClick = ev => {
               ev.preventDefault();
-              setPage(v);
+              spage(v);
             };
             return (
               <li

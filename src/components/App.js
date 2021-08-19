@@ -4,20 +4,26 @@ import { connect } from 'react-redux';
 import { APP_LOAD, REDIRECT, ERASE_TOAST } from '../constants/actionTypes';
 import { Route, Switch } from 'react-router-dom';
 import Article from './Article';
-import Editor from './Editor';
+import Editor from './Article/Editor';
 import Moderator from './Moderator';
 import EditorProduct from './EditorProduct';
-import Community from './Community';
+import Community from './Setting/Community';
 import Home from './Home/Home';
 import Login from './Auth/Login';
 import Thankyou from './Auth/Thankyou';
+import VerifyEmail from './Auth/VerifyEmail';
+import ForgotPassword from './Auth/ForgotPassword';
 import Profile from './Browse/Profile';
 import ProfileFavorites from './Browse/ProfileFavorites';
 import Register from './Auth/Register';
-import Settings from './Settings';
+import InputEmail from './Auth/InputEmail'
+import Settings from './Browse/Settings';
 import Browse from './Browse/Browse'
 import Main from './Browse/Main'
 import Admin from './Admin'
+import Communities from './Community/Main'
+import SetModerator from './Community/Moderator'
+import Error404 from './error/404'
 import { store } from '../store';
 import { push } from 'react-router-redux';
 import { ToastContainer, toast } from 'react-toastify';
@@ -87,28 +93,33 @@ class App extends React.Component {
       return (
         <ThemeProvider theme={appliedTheme}>     
             <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route path="/Thankyou-Register" component={Thankyou}/>         
-            <Route path="/browse">               
-              <Browse>
-              <Route path="/browse/moderator" component={Moderator} />
-              <Route path="/browse/admin" component={Admin} />
-              <Route path="/browse/editor/:slug" component={Editor} />
-              <Route path="/browse/editor" component={Editor} />
-              <Route path="/browse/editorProduct/:slug" component={EditorProduct}/>
-              <Route path="/browse/editorProduct" component={EditorProduct} />
-              <Route path="/browse/editorCommunity/:slug" component={Community} />
-              <Route path="/browse/editorCommunity" component={Community} />
-              <Route path="/browse/community/:id" component={Main}/>
-              <Route path="/browse/article/:id" component={Article} />
-              <Route path="/browse/settings" component={Settings} />
-              <Route path="/browse/@:username/favorites" component={ProfileFavorites} />
-              <Route path="/browse/@:username" component={Profile} />
+              <Route exact path="/" component={Home}/>
+              <Route path="/login" component={Login} />
+              <Route path="/register" component={Register} />
+              <Route path="/Thankyou-Register" component={Thankyou}/>   
+              <Route path="/verifyEmail" component={VerifyEmail}/>         
+              <Route path="/forgot-password" component={ForgotPassword}/>
+              <Route path='/input-email' component={InputEmail}/>
+              <Route path="/browse">               
+                <Browse>
+                <Route path="/browse/set-moderator" component={SetModerator} />
+                <Route path="/browse/communities" component={Communities} />
+                <Route path="/browse/moderator" component={Moderator} />
+                <Route path="/browse/admin" component={Admin} />
+                {/* <Route path="/browse/editor/:slug" component={Editor} /> */}
+                <Route path="/browse/editor" component={Editor} />
+                <Route path="/browse/editorProduct/:slug" component={EditorProduct}/>
+                <Route path="/browse/editorProduct" component={EditorProduct} />
+                <Route path="/browse/editorCommunity/:slug" component={Community} />
+                <Route path="/browse/editorCommunity" component={Community} />
+                <Route path="/browse/community/:id" component={Main}/>
+                <Route path="/browse/article/:id" component={Article} />
+                <Route path="/browse/settings" component={Settings} />
+                <Route path="/browse/@:username/favorites" component={ProfileFavorites} />
+                <Route path="/browse/@:username" component={Profile} />
               </Browse>
-            </Route>
-
+              </Route>            
+              <Route path="*" component={Error404}/>
             </Switch>
             <ToastContainer />
 

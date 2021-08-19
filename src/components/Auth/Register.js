@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import logo from '../../assets/images/newlogo.png';
 import agent from '../../agent';
 import { connect } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import {
   UPDATE_FIELD_AUTH,
   REGISTER,
@@ -22,8 +23,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
   onChangeUsername: value =>
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
-  onSubmit: (username, email, password) => {
-    const payload = agent.Auth.register(username, email, password);
+  onSubmit: (formData) => {
+    const payload = agent.Auth.register(formData);
     dispatch({ type: REGISTER, payload })
   },
   onUnload: () =>
@@ -33,15 +34,31 @@ const mapDispatchToProps = dispatch => ({
 class Register extends React.Component {
   constructor() {
     super();
+    this.state = {
+      file: null
+    }
     this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
     this.changeUsername = ev => this.props.onChangeUsername(ev.target.value);
     this.submitForm = (username, email, password) => ev => {
       ev.preventDefault();
-      this.props.onSubmit(username, email, password);
+      const formData = new FormData();
+    
+      // Update the formData object
+      // formData.append(
+      //   "myFile", this.state.file
+      // );
+      const filename = uuidv4() + "-" + this.state.file.name
+      console.log(filename)
+      formData.append('username', username)
+      formData.append('email', email)
+      formData.append('password', password)
+      formData.append( 'image' , this.state.file, filename)
+      console.log(formData)
+      this.props.onSubmit(formData);
     }
   }
-
+  
   componentWillUnmount() {
     this.props.onUnload();
   }
@@ -95,12 +112,9 @@ class Register extends React.Component {
                 onChange={this.changePassword}
               />
             </Grid>
-            {/* <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid> */}
+            <Grid item xs={12}>
+              <input type="file"  onChange={(e) => this.setState({file: e.target.files[0]})}/>
+            </Grid>
           </Grid><br/>
           <Button
             type="submit"

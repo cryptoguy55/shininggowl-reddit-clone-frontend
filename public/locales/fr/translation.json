@@ -1,0 +1,28 @@
+{
+  "browse" : {
+    "browse": "Parcourir",
+    "home": "Domicile",
+    "welcome_to_reddit": "Bienvenue sur Reddit",
+    "communities": "Communautés",
+    "your_posts": "Votre Poster",
+    "your_profile": "Votre profil",
+    "top_news_communities": "Les meilleures communautés d'actualités",
+    "tags": "Mots clés",
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "create_post": "Créer un article",
+    "create_community": "Créer une communauté",
+    "create_product": "Créer un produit",
+    "moderator_management": "Gestion des modérateurs",
+    "admin_management": "Gestion administrative",
+    "logout": "Se déconnecter",
+    "search": "Chercher",
+    "set_moderator": "Définir le modérateur"
+  },
+  "language": "Français",
+  "title": "Willkommen zu react und react-i18next",
+  "description": {
+    "part1": "Um loszulegen, ändere <1>src/App(DE).js</1> und speichere um neuzuladen.",
+    "part2": "Wechsle die Sprache zwischen deutsch und englisch mit Hilfe der beiden Schalter."
+  }
+}

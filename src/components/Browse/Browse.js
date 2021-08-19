@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -11,7 +14,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import HomeIcon from '@material-ui/icons/Home';
 import GroupIcon from '@material-ui/icons/People';
 import PostsIcon from '@material-ui/icons/LocalPostOffice';
@@ -22,15 +24,15 @@ import { Paper } from '@material-ui/core';
 import {Card, CardHeader, Avatar, CardContent, Badge} from '@material-ui/core'
 import LoyaltiIcon from "@material-ui/icons/Loyalty"
 import CupIcon from "@material-ui/icons/EmojiEvents"
-import logo from '../../assets/images/newlogo.png';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Fab from '@material-ui/core/Fab';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Zoom from '@material-ui/core/Zoom';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import Toolbar from '@material-ui/core/Toolbar';
 import Banner from './Banner'
+import { GET_COMMUNITIES, SEARCH } from '../../constants/actionTypes';
+import agent from '../../agent'
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -94,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: "0px 10px" ,  
   },
   avatar: {
     backgroundColor: "red",
@@ -102,11 +104,14 @@ const useStyles = makeStyles((theme) => ({
   scroll: {
     position: "fixed",
     right: 20,
-    bottom: 20
+    bottom: 20,
+    zIndex: 9999
   }
 }));
 
 function ScrollTop(props) {
+  
+
   const { children, window } = props;
   const classes = useStyles();
   // Note that you normally won't need to set the window ref as useScrollTrigger
@@ -125,7 +130,6 @@ function ScrollTop(props) {
       anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
-
   return (
     <Zoom in={trigger}>
       <div onClick={handleClick} role="presentation" className={classes.scroll}>
@@ -137,8 +141,24 @@ function ScrollTop(props) {
 
 
 export default function MiniDrawer(props) {
+  const communities = useSelector((state) => state.community.communities)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    // code to run on component mount
+    let result = agent.Communities.all()
+    dispatch({type: GET_COMMUNITIES, payload: result})
+  }, [])
+  const watchForEnter = ev => {
+    ev.preventDefault();
+    if (ev.keyCode === 13) {
+      ev.preventDefault();
+      dispatch({type: SEARCH, payload: search})
+    }
+  };
+  const { t, i18n } = useTranslation();
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState("");
 
   const handleDrawerOpen = () => {
     setOpen(!open);
@@ -184,45 +204,50 @@ export default function MiniDrawer(props) {
           >
             <MenuIcon />
           </IconButton></ListItemIcon>
-          <ListItemText primary="Welcome to Reddit" />
+          <ListItemText primary={t('browse.welcome_to_reddit')} />
             </ListItem>
             
         </List>
         <Divider />
         <List>
+          <Link to="/">
             <ListItem button>
               <ListItemIcon><HomeIcon/></ListItemIcon>
-              <ListItemText primary="Home" />
+              <ListItemText primary={t('browse.home')} />
             </ListItem>
+          </Link>
         </List>
         <List>
+          <Link to="/browse/communities">
             <ListItem button>
               <ListItemIcon><GroupIcon/></ListItemIcon>
-              <ListItemText primary="Communities" />
+              <ListItemText primary={t('browse.communities')} />
             </ListItem>
+          </Link>
         </List>
         <List>
             <ListItem button>
               <ListItemIcon><PostsIcon/></ListItemIcon>
-              <ListItemText primary="Your Posts" />
+              <ListItemText primary={t('browse.your_posts')} />
             </ListItem>
         </List>
         <List>
+          <Link to="/browse/settings">
             <ListItem button>
               <ListItemIcon><ProfileIcon/></ListItemIcon>
-              <ListItemText primary="Your Profile" />
+              <ListItemText primary={t('browse.your_profile')} />
             </ListItem>
+          </Link>
         </List>
         <List>
             <ListItem button>
               <ListItemIcon><SearchIcon/></ListItemIcon>
-              <Paper component="form" >
+            
                 <InputBase
                     className={classes.input}
-                    placeholder="Search Google Maps"
-                    inputProps={{ 'aria-label': 'search google maps' }}
+                    placeholder={t('browse.search')}  onChange={e => setSearch(e.target.value)}
+                    onKeyUp={watchForEnter}
                 />
-             </Paper>
             </ListItem>
         </List>
         <Divider />
@@ -230,39 +255,45 @@ export default function MiniDrawer(props) {
         <ListItemIcon>
           <InboxIcon />
         </ListItemIcon>
-        <ListItemText primary="Communities" />
+        <ListItemText primary={t('browse.communities')} />
         {open1 ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
         <Collapse in={open1} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {['All mail', 'Trash', 'Spam', 'All mailx', 'Tracsh', 'Spcam'].map((text, index) => (           
-            <ListItem button key={text}>
+          { communities.map((text, index) => (              
+            <ListItem button key={text.ID}>
                 <ListItemIcon></ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
+              <Link to={`/browse/community/${text.ID}`}> <ListItemText primary={text.Name} />  </Link> 
+            </ListItem>          
           ))}
         </List>
       </Collapse>
         
       </Drawer>
       <main className={classes.content} >
-    
-        <div className="flex flex-row">
-          <div className="flex-grow mx-5 p-4">
-        {props.children}
-        </div>
-        <div style={{width: 300}}>
-          <Card id="back-to-top-anchor">
+           <div  id="back-to-top-anchor"></div>
+          <Paper className="flex-grow  p-3 ">
+            {props.children}
+          </Paper>
+       <ScrollTop {...props}>
+        <Fab color="secondary" size="small" aria-label="scroll back to top">
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </ScrollTop>
+      </main>
+      <div style={{minWidth: 250}} >
+        <div className="fixed overflow-y-auto h-full" style={{marginTop: -100, paddingTop: 100}}> 
+        <Card >
             <CardHeader
               avatar={
                 <Avatar aria-label="recipe" className="bg-red-500">
                   <CupIcon/>
                 </Avatar>
               }
-              title="Top News Communities"
+              title={t('browse.top_news_communities')}
             />
             <CardContent>
-              <div variant="body2" color="textSecondary" className="m-2">
+              <div variant="body2" color="textSecondary" className="mr-2 mb-1">
                 <ol className="list-decimal text-md -mr-5">
                   <li>r/football</li>
                   <li>r/basketball</li>
@@ -274,7 +305,7 @@ export default function MiniDrawer(props) {
               </div>
             </CardContent>
           </Card>
-          <br/><br/>
+          <br/>
           <Card >
             <CardHeader
               avatar={
@@ -282,38 +313,38 @@ export default function MiniDrawer(props) {
                   <LoyaltiIcon/>
                 </Avatar>
               }
-              title="Tags"
+              title={t('browse.tags')}
             />
             
             <CardContent>  
-            <Badge badgeContent={4} color="primary" className="m-2">
+            <Badge badgeContent={4} color="primary" className="mr-2 mb-1">
             <span className="border border-blue-600 p-1 inline-block rounded-full">python</span>  <br/>
             </Badge>
-            <Badge badgeContent={5} color="primary" className="m-2">
+            <Badge badgeContent={5} color="primary" className="mr-2 mb-1">
             <span className="border border-blue-600 p-1 inline-block rounded-full" >python</span>  <br/>
             </Badge>
-            <Badge badgeContent={2} color="primary" className="m-2">
+            <Badge badgeContent={2} color="primary" className="mr-2 mb-1">
             <span className="border border-blue-600 p-1 inline-block rounded-full">python</span>  <br/>
             </Badge>
-            <Badge badgeContent={7} color="primary" className="m-2">
+            <Badge badgeContent={7} color="primary" className="mr-2 mb-1">
             <span className="border border-blue-600 p-1 inline-block rounded-full " >python</span>  <br/>
             </Badge>
-            <Badge badgeContent={7} color="primary" className="m-2">
+            <Badge badgeContent={7} color="primary" className="mr-2 mb-1">
             <span className="border border-blue-600 p-1 inline-block rounded-full">Django</span>  <br/>
             </Badge>
-            <Badge badgeContent={99} color="primary" className="m-2">
+            <Badge badgeContent={99} color="primary" className="mr-2 mb-1">
             <span className="border border-blue-600 p-1 inline-block rounded-full" >C#</span>  <br/>
             </Badge>
-            <Badge badgeContent={22} color="primary" className="m-2">
+            <Badge badgeContent={22} color="primary" className="mr-2 mb-1">
             <span className="border border-blue-600 p-1 inline-block rounded-full" >Flask</span>  <br/>
             </Badge>
-            <Badge badgeContent={4} color="primary" className="m-2">
+            <Badge badgeContent={4} color="primary" className="mr-2 mb-1">
             <span className="border border-blue-600 p-1 inline-block rounded-full">Golang</span>  <br/>
             </Badge>
-            <Badge badgeContent={4} color="primary" className="m-2">
+            <Badge badgeContent={4} color="primary" className="mr-2 mb-1">
             <span className="border border-blue-600 p-1 inline-block rounded-full" >React</span>  <br/>
             </Badge>
-            <Badge badgeContent={4} color="primary" className="m-2">
+            <Badge badgeContent={4} color="primary" className="mr-2 mb-1">
             <span className="border border-blue-600 p-1 inline-block rounded-full" >Flutter</span>  <br/>
             </Badge>            
             
@@ -321,18 +352,11 @@ export default function MiniDrawer(props) {
               
             </CardContent>
           </Card>
-
-    </div>
- 
+      
+      
         </div>
-    
-        <ScrollTop {...props}>
-        <Fab color="secondary" size="small" aria-label="scroll back to top">
-          <KeyboardArrowUpIcon />
-        </Fab>
-      </ScrollTop>
-      </main>
-    
+     </div>
+       
     </div>
   
       </>

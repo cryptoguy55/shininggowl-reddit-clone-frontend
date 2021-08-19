@@ -1,0 +1,28 @@
+{
+  "browse" : {
+    "browse": "Browse",
+    "home": "Home",
+    "welcome_to_reddit": "Welcome to Reddit",
+    "communities": "Communities",
+    "your_posts": "Your Posts",
+    "your_profile": "Your Profile",
+    "top_news_communities": "Top News Communities",
+    "tags": "Tags",
+    "login": "LogIn",
+    "signup": "SignUp",
+    "create_post": "Create Post",
+    "create_community": "Create Community",
+    "create_product": "Create Product",
+    "moderator_management": "Moderator Management",
+    "admin_management": "Admin Management",
+    "logout": "LogOut",
+    "search": "Search",
+    "set_moderator": "Set Moderator"
+  },
+  "language": "English",
+  "title": "Willkommen zu react und react-i18next",
+  "description": {
+    "part1": "Um loszulegen, ändere <1>src/App(DE).js</1> und speichere um neuzuladen.",
+    "part2": "Wechsle die Sprache zwischen deutsch und englisch mit Hilfe der beiden Schalter."
+  }
+}

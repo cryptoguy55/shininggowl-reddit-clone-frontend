@@ -2,7 +2,7 @@ import React from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import { ADD_COMMENT } from '../../constants/actionTypes';
-
+import { Button, TextField } from '@material-ui/core';
 const mapDispatchToProps = dispatch => ({
   onSubmit: payload =>
     dispatch({ type: ADD_COMMENT, payload })
@@ -30,26 +30,18 @@ class CommentInput extends React.Component {
 
   render() {
     return (
-      <form className="card comment-form" onSubmit={this.createComment}>
-        <div className="card-block">
-          <textarea className="form-control"
-            placeholder="Write a comment..."
-            value={this.state.body}
-            onChange={this.setBody}
-            rows="3">
-          </textarea>
-        </div>
-        <div className="card-footer">
-          <img
-            src={this.props.currentUser.image}
-            className="comment-author-img"
-            alt={this.props.currentUser.username} />
-          <button
-            className="btn btn-sm btn-primary"
-            type="submit">
-            Post Comment
-          </button>
-        </div>
+      <form className="mt-5 px-4 border-l-4 border-red-500" onSubmit={this.createComment}>
+        <TextField
+          label="Commment"
+          placeholder="Write a comment..."
+          multiline
+          variant="outlined"
+          value={this.state.body}
+          onChange={this.setBody} fullWidth/><br/><br/>
+          <Button variant="contained" type="submit" color="primary" className="float-right">                    
+              Post Comment
+          </Button>
+          <br/> <br/>
       </form>
     );
   }

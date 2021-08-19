@@ -3,7 +3,9 @@ import React from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import { DELETE_ARTICLE } from '../../constants/actionTypes';
-
+import { IconButton } from '@material-ui/core';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined'
 const mapDispatchToProps = dispatch => ({
   onClickDelete: payload =>
     dispatch({ type: DELETE_ARTICLE, payload })
@@ -17,16 +19,15 @@ const ArticleActions = props => {
   if (props.canModify) {
     return (
       <span>
-
-        <Link
-          to={`/editor/${article.slug}`}
-          className="btn btn-outline-secondary btn-sm">
-          <i className="ion-edit"></i> Edit Article
+         
+        <Link to={`/browse/editor/${article.slug}`}>
+            <IconButton color="primary">
+                  <EditOutlinedIcon  />
+            </IconButton>
         </Link>
-
-        <button className="btn btn-outline-danger btn-sm" onClick={del}>
-          <i className="ion-trash-a"></i> Delete Article
-        </button>
+        <IconButton aria-label="delete" color="secondary" onClick={del}>
+                  <DeleteOutlineOutlinedIcon  />
+        </IconButton>
 
       </span>
     );

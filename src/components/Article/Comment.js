@@ -1,5 +1,4 @@
 import DeleteButton from './DeleteButton';
-import { Link } from 'react-router-dom';
 import React from 'react';
 
 const Comment = props => {
@@ -7,27 +6,24 @@ const Comment = props => {
   const show = props.currentUser &&
     props.currentUser.username === comment.author.username;
   return (
-    <div className="card">
+    <div className="mt-3 border-l-4 border-blue-500 pl-4">
+       <hr className="my-3"/>
+        <div className="flex">         
+          <img src={`http://localhost:8080/api/public/${comment.author.image}`} alt={comment.author.username} className="rounded-full" width="20"/>
+          &nbsp; &nbsp; {comment.author.username}
+          <div className="flex-grow"></div>
+          <span className="date">
+            {new Date(comment.createdAt).toLocaleString()}
+          </span>
+         </div>
+
       <div className="card-block">
         <p className="card-text">{comment.body}</p>
       </div>
-      <div className="card-footer">
-        <Link
-          to={`/@${comment.author.username}`}
-          className="comment-author">
-          <img src={comment.author.image} className="comment-author-img" alt={comment.author.username} />
-        </Link>
-        &nbsp;
-        <Link
-          to={`/@${comment.author.username}`}
-          className="comment-author">
-          {comment.author.username}
-        </Link>
-        <span className="date-posted">
-          {new Date(comment.createdAt).toDateString()}
-        </span>
+      <div className="card-footer text-right">      
         <DeleteButton show={show} slug={props.slug} commentId={comment.id} />
       </div>
+     
     </div>
   );
 };

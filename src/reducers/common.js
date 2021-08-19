@@ -16,7 +16,11 @@ import {
   LOGIN_PAGE_UNLOADED,
   REGISTER_PAGE_UNLOADED,
   ERASE_TOAST,
-  Theme
+  Theme,
+  Verify,
+  COMMON,
+  SUCCESS,
+  COMMUNITY_SUBMITTED
 } from '../constants/actionTypes';
 
 const defaultState = {
@@ -28,10 +32,35 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+    case COMMUNITY_SUBMITTED: 
+    return {
+      ...state, 
+      error: action.error? action.payload.message : null,
+      success: action.error? null: action.payload.message,
+    }    
+    case SUCCESS: 
+      return {
+        ...state, 
+        success: action.error? null: action.payload.message,
+      }
+    case COMMON: 
+      return {
+        ...state, 
+        error: action.error? action.payload.message : null,
+        success: action.error? null: action.payload.message,
+      }      
     case Theme: 
       return {
         ...state, theme: !state.theme
       }
+    case Verify: 
+      return {
+        ...state, 
+        error: action.error? action.payload.message : null,
+        success: action.error? null: action.payload.message,
+        redirectTo: action.error ? null : '/',
+      }      
+    
     case APP_LOAD:
       return {
         ...state,
@@ -46,8 +75,12 @@ export default (state = defaultState, action) => {
     case LOGOUT:
       return { ...state, redirectTo: '/', token: null, currentUser: null, success: "Logout successfully" };
     case ARTICLE_SUBMITTED:
-      const redirectUrl = `/article/${action.payload.article.slug}`;
-      return { ...state, redirectTo: redirectUrl };
+      const redirectUrl = `/browse/community/${action.payload.article.slug}`;
+      return { ...state, 
+        redirectTo: action.error? null : redirectUrl,
+        error: action.error? action.payload.errors : null,
+        success: action.error? null: "Post has been created successfully.",
+      };
     case SETTINGS_SAVED:
       return {
         ...state,

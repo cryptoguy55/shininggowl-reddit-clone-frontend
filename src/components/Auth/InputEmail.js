@@ -12,13 +12,11 @@ import {
 } from "react-router-dom";
 
 export default function VerifyEmail() {
-  const [password, setPassword] = useState("")
-  let query = new URLSearchParams(useLocation().search);
-  let  token = query.get("reset_token");
-  const dispatch = useDispatch();
-  const submitForm = (e) => {
-    e.preventDefault();
-   dispatch({ type: "Verify", payload: agent.Auth.verifyPassword(token, password) })
+  const [email, setEmail] = useState("")
+  const dispatch = useDispatch()
+  const submitForm = () => (ev) => {
+    ev.preventDefault();
+    dispatch({ type: "Verify", payload: agent.Auth.resetPassword(email) })
   }
     return (
       <Container component="main" maxWidth="md" className=" mt-20">
@@ -29,24 +27,24 @@ export default function VerifyEmail() {
           alt="underMaintenance"
           className="img-fluid align-self-center mt-75"
         />
-        <form onSubmit={submitForm } >
-          <TextField
+        <form onSubmit={submitForm() } >
+           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            label="Password"
-            type="password"
-            id="password"
-            onChange={(e) => {setPassword(e.target.value)}} 
-          />
+            id="email"
+            label="Email Address"
+            autoFocus
+           onChange={(e) => {setEmail(e.target.value)}} 
+          />        
            <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
           >
-            Sign In
+          RESET
           </Button>
           </form>
       </div>     
