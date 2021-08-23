@@ -23,6 +23,7 @@ import Main from './Browse/Main'
 import Admin from './Admin'
 import Communities from './Community/Main'
 import SetModerator from './Community/Moderator'
+import tag from './Article/ArticleByTag'
 import Error404 from './error/404'
 import { store } from '../store';
 import { push } from 'react-router-redux';
@@ -106,6 +107,7 @@ class App extends React.Component {
                 <Route path="/browse/communities" component={Communities} />
                 <Route path="/browse/moderator" component={Moderator} />
                 <Route path="/browse/admin" component={Admin} />
+                <Route path="/browse/tag" component={tag} />
                 {/* <Route path="/browse/editor/:slug" component={Editor} /> */}
                 <Route path="/browse/editor" component={Editor} />
                 <Route path="/browse/editorProduct/:slug" component={EditorProduct}/>

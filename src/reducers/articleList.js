@@ -52,16 +52,16 @@ export default (state = {}, action) => {
         tag: action.tag,
         currentPage: 0
       };
-    case HOME_PAGE_LOADED:
-      return {
-        ...state,
-        pager: action.pager,
-        tags: action.payload[0].tags,
-        articles: action.payload[1].articles,
-        articlesCount: action.payload[1].articlesCount,
-        currentPage: 0,
-        tab: action.tab
-      };
+    // case HOME_PAGE_LOADED:
+    //   return {
+    //     ...state,
+    //     pager: action.pager,
+    //     tags: action.payload[0].tags,
+    //     articles: action.payload[1].articles,
+    //     articlesCount: action.payload[1].articlesCount,
+    //     currentPage: 0,
+    //     tab: action.tab
+    //   };
     case HOME_PAGE_UNLOADED:
       return {};
     case CHANGE_TAB:

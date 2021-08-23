@@ -2,8 +2,9 @@ import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next';
+import { push } from 'react-router-redux'
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -31,7 +32,9 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Zoom from '@material-ui/core/Zoom';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Banner from './Banner'
-import { GET_COMMUNITIES, SEARCH } from '../../constants/actionTypes';
+import { GET_COMMUNITIES, 
+  SEARCH,   HOME_PAGE_LOADED,
+  APPLY_TAG_FILTER } from '../../constants/actionTypes';
 import agent from '../../agent'
 const drawerWidth = 240;
 
@@ -142,12 +145,16 @@ function ScrollTop(props) {
 
 export default function MiniDrawer(props) {
   const communities = useSelector((state) => state.community.communities)
+  const tags = useSelector((state) => state.home.tags)
   const dispatch = useDispatch()
   useEffect(() => {
     // code to run on component mount
     let result = agent.Communities.all()
     dispatch({type: GET_COMMUNITIES, payload: result})
+    dispatch({ type: HOME_PAGE_LOADED, payload: agent.Tags.getAll() })
   }, [])
+  const onClickTag =  (tag, pager, payload) => {
+     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload }) }
   const watchForEnter = ev => {
     ev.preventDefault();
     if (ev.keyCode === 13) {
@@ -260,11 +267,12 @@ export default function MiniDrawer(props) {
       </ListItem>
         <Collapse in={open1} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          { communities.map((text, index) => (              
-            <ListItem button key={text.ID}>
-                <ListItemIcon></ListItemIcon>
-              <Link to={`/browse/community/${text.ID}`}> <ListItemText primary={text.Name} />  </Link> 
-            </ListItem>          
+          { communities.map((text, index) => ( 
+                       
+            text.active &&  <ListItem button key={text.ID}>
+                                <ListItemIcon></ListItemIcon>
+                              <Link to={`/browse/community/${text.ID}`}> <ListItemText primary={text.Name} />  </Link> 
+                            </ListItem>          
           ))}
         </List>
       </Collapse>
@@ -317,36 +325,25 @@ export default function MiniDrawer(props) {
             />
             
             <CardContent>  
-            <Badge badgeContent={4} color="primary" className="mr-2 mb-1">
-            <span className="border border-blue-600 p-1 inline-block rounded-full">python</span>  <br/>
-            </Badge>
-            <Badge badgeContent={5} color="primary" className="mr-2 mb-1">
-            <span className="border border-blue-600 p-1 inline-block rounded-full" >python</span>  <br/>
-            </Badge>
-            <Badge badgeContent={2} color="primary" className="mr-2 mb-1">
-            <span className="border border-blue-600 p-1 inline-block rounded-full">python</span>  <br/>
-            </Badge>
-            <Badge badgeContent={7} color="primary" className="mr-2 mb-1">
-            <span className="border border-blue-600 p-1 inline-block rounded-full " >python</span>  <br/>
-            </Badge>
-            <Badge badgeContent={7} color="primary" className="mr-2 mb-1">
-            <span className="border border-blue-600 p-1 inline-block rounded-full">Django</span>  <br/>
-            </Badge>
-            <Badge badgeContent={99} color="primary" className="mr-2 mb-1">
-            <span className="border border-blue-600 p-1 inline-block rounded-full" >C#</span>  <br/>
-            </Badge>
-            <Badge badgeContent={22} color="primary" className="mr-2 mb-1">
-            <span className="border border-blue-600 p-1 inline-block rounded-full" >Flask</span>  <br/>
-            </Badge>
-            <Badge badgeContent={4} color="primary" className="mr-2 mb-1">
-            <span className="border border-blue-600 p-1 inline-block rounded-full">Golang</span>  <br/>
-            </Badge>
-            <Badge badgeContent={4} color="primary" className="mr-2 mb-1">
-            <span className="border border-blue-600 p-1 inline-block rounded-full" >React</span>  <br/>
-            </Badge>
-            <Badge badgeContent={4} color="primary" className="mr-2 mb-1">
-            <span className="border border-blue-600 p-1 inline-block rounded-full" >Flutter</span>  <br/>
-            </Badge>            
+            <div className="tag-list">
+        {
+          tags && tags.map(tag => {
+            const handleClick = ev => {
+              ev.preventDefault();
+              onClickTag(tag, page => agent.Articles.byTag(tag, page), agent.Articles.byTag(tag));
+              dispatch(push('/browse/tag'))
+            };
+         
+            return (
+              // <Badge badgeContent={4} color="primary" className="mr-2 mb-1">
+            <a href=""  key={tag}  onClick={handleClick}  className="border border-blue-600 p-1 inline-block rounded-full mr-2 mb-1">{tag}</a> 
+            // </Badge>
+             
+            );
+          })
+        }
+      </div>
+           
             
           
               

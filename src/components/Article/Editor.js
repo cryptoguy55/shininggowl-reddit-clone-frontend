@@ -102,7 +102,6 @@ class EditorMain extends React.Component {
       return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
     }
     this.props.onLoad(null);
-    console.log("-----------", this.props.isProduct);
   }
 
   componentWillUnmount() {
@@ -112,6 +111,7 @@ class EditorMain extends React.Component {
   render() {
    
     const { editorState } = this.state;
+    console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
     return (
       <div className="editor-page max-w-3xl mx-auto">
          <p className="text-2xl font-bold text text-center mt-4 ">Create Post</p> <br/>     

@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Switch from '@material-ui/core/Switch';
-import {SUCCESS} from '../../constants/actionTypes'
+import {SUCCESS, ADD_COMMUNITY, DELETE_COMMUNITY} from '../../constants/actionTypes'
 
 
 
@@ -17,8 +17,12 @@ export default function BasicTable() {
   const handleChange = e => {
     if (e.target.checked) {
       dispatch({type: SUCCESS, payload: {message: "Joined successfully"}})
+      dispatch({type: DELETE_COMMUNITY, payload: e.target.value})
+      console.log(e.target.value)
+
     } else {
       dispatch({type: SUCCESS, payload: {message: "Quitted successfully"}})
+      dispatch({type: DELETE_COMMUNITY, payload: e.target.value})
     }
   }
   useEffect(() => {
@@ -57,7 +61,9 @@ export default function BasicTable() {
               <TableCell align="right">{row.description}</TableCell>
               <TableCell align="right">
                   Join<Switch
+                  key={row.ID}
                   defaultChecked
+                  value={row.ID}
                    // checked={state.checkedA}
                    onChange={handleChange}
                     
