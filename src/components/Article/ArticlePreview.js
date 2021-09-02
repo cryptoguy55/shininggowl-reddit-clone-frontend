@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import agent from '../../agent';
 import ArticleActions from './ArticleActions';
 import { connect } from 'react-redux';
-import { ARTICLE_FAVORITED, ARTICLE_UNFAVORITED } from '../../constants/actionTypes';
+import { ADD_PRODUCT, ARTICLE_FAVORITED, ARTICLE_UNFAVORITED } from '../../constants/actionTypes';
 import UpvoteIcon from "@material-ui/icons/ThumbUpAltOutlined"
 import DownvoteIcon from "@material-ui/icons/ThumbDownAltOutlined"
 import { IconButton } from '@material-ui/core';
@@ -15,6 +15,7 @@ import striptags from 'striptags'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { SelectionState } from 'draft-js';
+import AddShoppingCartOutlinedIcon from '@material-ui/icons/AddShoppingCartOutlined';
 const FAVORITED_CLASS = 'btn btn-sm btn-primary';
 const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
 
@@ -26,12 +27,17 @@ const mapDispatchToProps = dispatch => ({
   unfavorite: slug => dispatch({
     type: ARTICLE_UNFAVORITED,
     payload: agent.Articles.unfavorite(slug)
+  }),
+  addp: article => dispatch({
+    type: "ADD_PRODUCT",
+    payload: article
   })
 });
 
 const ArticlePreview = props => {
   const [content, setContent] = React.useState([])
   const article = props.article;
+  article.quantity =1
   const favoriteButtonClass = article.favorited ?
     FAVORITED_CLASS :
     NOT_FAVORITED_CLASS;
@@ -92,8 +98,7 @@ const ArticlePreview = props => {
           </span></div>
       <p className="text-xl underline-dark-600 text-center"><Link to = {`/browse/article/${article.slug}`}> -- {article.title} --</Link></p>
       <img src={`http://localhost:8080/api/public/${article.image}`} />
-        <p dangerouslySetInnerHTML={createMarkup(article.body)}>
-    
+        <p dangerouslySetInnerHTML={createMarkup(article.body)}>    
       </p>
       <br/>
         { 
@@ -118,6 +123,13 @@ const ArticlePreview = props => {
           })
        }
       <br/>
+      <p>
+        {article.price !=0 ? `${article.price} $` : "" }
+        {article.price !=0 &&  
+        <IconButton  color="secondary" onClick={()=> props.addp(article)}>
+            <AddShoppingCartOutlinedIcon  />
+        </IconButton> }
+      </p>
       <ul className="tag-list flex">
         {
           article.tagList.map(tag => {

@@ -9,6 +9,11 @@ import {
 
 export default (state = {}, action) => {
   switch (action.type) {
+    case "Users": 
+    return {
+      ...state,
+      users:  action.payload
+    };
     case LOGIN:
     case REGISTER:
       return {

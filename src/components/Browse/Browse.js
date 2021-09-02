@@ -36,6 +36,8 @@ import { GET_COMMUNITIES,
   SEARCH,   HOME_PAGE_LOADED,
   APPLY_TAG_FILTER } from '../../constants/actionTypes';
 import agent from '../../agent'
+
+import Cart from "../FloatCart"
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -355,7 +357,7 @@ export default function MiniDrawer(props) {
      </div>
        
     </div>
-  
+        <Cart/>
       </>
   );
 }

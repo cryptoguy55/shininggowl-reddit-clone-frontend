@@ -18,7 +18,7 @@ import AssignmentIndOutlinedIcon from '@material-ui/icons/AssignmentIndOutlined'
 import DvrIcon from '@material-ui/icons/Dvr';
 import { withTheme } from '@material-ui/core/styles';
 import { withTranslation } from 'react-i18next';
-
+import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 
 const mapStateToProps = state => ({
   currentUser: state.common.currentUser,
@@ -73,6 +73,7 @@ class Header extends Component {
                     </>
                     ) : 
                     (
+                      <>
                       <div className="dropdown mr-3">
                       <span className="dropbtn font-bold hover:text-red-500 flex  mr-3"> <img src={`http://localhost:8080/api/public/${this.props.currentUser.image}`} className="rounded-full" width="40"/><ArrowDropDownIcon/></span>
                       <div className="dropdown-content" style={{backgroundColor: this.props.theme.palette.background.default}}>
@@ -87,7 +88,7 @@ class Header extends Component {
                           <ListItemIcon>
                             < CreateNewFolderIcon />
                           </ListItemIcon>
-                         <Link to="/browse/editorCommunity"> <ListItemText primary={t('browse.create_community')} /></Link>
+                         <Link to="/browse/editor"> <ListItemText primary={t('browse.create_community')} /></Link>
                         </ListItem>                     
                       <ListItem button>
                         <ListItemIcon>
@@ -130,8 +131,13 @@ class Header extends Component {
                           <ListItemText primary={t('browse.logout')}  onClick={this.props.onClickLogout}/>
                         </ListItem>
                       </List>
+                      </div>                  
                       </div>
-                      </div>
+                     <li className="mr-3">
+                    <Link className="hover:text-red-500 font-bold" to="/chat"><ChatOutlinedIcon/></Link>
+                    </li>
+                    </>
+                      
                     )
                   }
                      <div className="dropdown mr-3">

@@ -45,3 +45,9 @@ export const ERROR = "ERROR"
 export const SEARCH = "SEARCH"
 export const ADD_COMMUNITY = "ADD_COMMUNITY"
 export const DELETE_COMMUNITY = "DELETE_COMMUNITY"
+export const LOAD_CART = 'LOAD_CART';
+export const ADD_PRODUCT = 'ADD_PRODUCT';
+export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
+export const CHANGE_PRODUCT_QUANTITY = 'CHANGE_PRODUCT_QUANTITY';
+export const UPDATE_CART = 'UPDATE_CART';
+

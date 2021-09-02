@@ -6,9 +6,13 @@
   
    padding-top: 100px
 }
+.MuiAppBar-positionFixed {
+  margin-top: 100px;
+}
 /* width */
 ::-webkit-scrollbar {
    width: 6px;
+   height: 7px
  }
  
  /* Track */
@@ -41,3 +45,14 @@
   z-index: 1;
 }
 .dropdown:hover .dropdown-content {display: block;}
+.rce-mbox-body {
+  display: flex !important;
+}
+.rce-mbox-time{
+  position: static !important;
+  margin-left: -90px;
+}
+.rce-citem-status {
+  width: 10px !important;
+  height: 10px !important;
+}

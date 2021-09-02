@@ -11,6 +11,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { v4 as uuidv4 } from 'uuid';
+import NumericInput from 'react-numeric-input';
 import {
   EDITOR_PAGE_LOADED,
   REMOVE_TAG,
@@ -43,7 +44,7 @@ class EditorMain extends React.Component {
     super();
     this.state = {
       editorState: EditorState.createEmpty(),
-      title: "", community: "", tag: "", tagList: [], file: "" 
+      title: "", community: "", tag: "", tagList: [], file: "" , price: 0.00
     }
       this.watchForEnter = ev => {
       if (ev.keyCode === 13) {
@@ -73,6 +74,7 @@ class EditorMain extends React.Component {
       formData.append('body', draftToHtml(convertToRaw(this.state.editorState.getCurrentContent())))
       formData.append('tagList', this.state.tagList)
       formData.append( 'image' , this.state.file, filename)
+      formData.append( 'price' , this.state.price)
 
       const slug = { slug: this.props.articleSlug };
       const promise = this.props.articleSlug ?
@@ -111,7 +113,7 @@ class EditorMain extends React.Component {
   render() {
    
     const { editorState } = this.state;
-    console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
+    console.log(this.state.price)
     return (
       <div className="editor-page max-w-3xl mx-auto">
          <p className="text-2xl font-bold text text-center mt-4 ">Create Post</p> <br/>     
@@ -161,6 +163,10 @@ class EditorMain extends React.Component {
                     <div className="w-1/4 bg-gray-100">
                     <input type="file" onChange={e => this.setState({file: e.target.files[0]})} required/>
                   </div>
+                  <br/>
+                  <p className="font-bold text-lg mt-8">Fixed price - in USD</p>
+                  <NumericInput step={0.01} precision={2} value={ this.state.price} className="h-10 w-48" 
+                   onChange={e => this.setState({price: e})}  snap/> $
                   <br/>
                   <div className="text-right">
                     <Button variant="contained"   

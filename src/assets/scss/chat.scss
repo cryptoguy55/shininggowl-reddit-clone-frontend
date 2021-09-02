@@ -1,0 +1,21 @@
+.avatar-status-online {
+  background-color: #28C76F;
+}
+.avatar-status-busy {
+  background-color: #EA5455;
+}
+.avatar-status-away {
+  background-color: #FF9F43;
+}
+.avatar-status-offline {
+  background-color: #6c757d;
+}
+[class*="avatar-status-"] {
+  border-radius: 50%;
+  width: 11px;
+  height: 11px;
+  position: absolute;
+  right: 15px;
+  bottom: 0;
+  border: 1px solid white;
+}

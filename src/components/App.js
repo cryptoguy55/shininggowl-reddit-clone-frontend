@@ -23,6 +23,7 @@ import Main from './Browse/Main'
 import Admin from './Admin'
 import Communities from './Community/Main'
 import SetModerator from './Community/Moderator'
+import Chat from './chat/Chat'
 import tag from './Article/ArticleByTag'
 import Error404 from './error/404'
 import { store } from '../store';
@@ -101,6 +102,7 @@ class App extends React.Component {
               <Route path="/verifyEmail" component={VerifyEmail}/>         
               <Route path="/forgot-password" component={ForgotPassword}/>
               <Route path='/input-email' component={InputEmail}/>
+              <Route path='/chat' component={Chat}/>
               <Route path="/browse">               
                 <Browse>
                 <Route path="/browse/set-moderator" component={SetModerator} />

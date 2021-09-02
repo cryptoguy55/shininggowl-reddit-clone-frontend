@@ -8,6 +8,7 @@ import home from './reducers/home';
 import profile from './reducers/profile';
 import settings from './reducers/settings';
 import community from './reducers/community';
+import cart from './reducers/cart';
 import { connectRouter  } from 'connected-react-router';
 import { createBrowserHistory } from 'history'
 export default combineReducers({
@@ -20,5 +21,6 @@ export default combineReducers({
   profile,
   settings,
   community,
+  cart,
   router: connectRouter(createBrowserHistory()) 
 });

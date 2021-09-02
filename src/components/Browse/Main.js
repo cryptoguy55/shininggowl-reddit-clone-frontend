@@ -4,7 +4,6 @@ import agent from '../../agent';
 import { connect } from 'react-redux';
 import { CHANGE_TAB } from '../../constants/actionTypes';
 
-
 const mapStateToProps = state => ({
   ...state.articleList,
   tags: state.home.tags,
@@ -24,7 +23,6 @@ const MainView = props => {
     // Update the document title using the browser API
 
   return (   
-
       <ArticleList
         pager={props.pager}
         articles={props.articles}

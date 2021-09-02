@@ -51,11 +51,13 @@ const localStorageMiddleware = store => next => action => {
     if (!action.error) {
       window.localStorage.setItem('jwt', action.payload.user.token);
       window.localStorage.setItem('refreshjwt', action.payload.user.refreshtoken);
+      window.localStorage.setItem('id', action.payload.user.id);
       agent.setToken(action.payload.user.token);
     }
   } else if (action.type === LOGOUT) {
     window.localStorage.setItem('jwt', '');
     window.localStorage.setItem('refreshjwt', '');
+    window.localStorage.setItem('id', '');
     agent.setToken(null);
   }
 
